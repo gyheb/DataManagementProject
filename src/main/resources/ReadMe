@@ -1,0 +1,71 @@
+1. download an ubuntu VM with 6 gb ram with a static IP of 192.168.6.128.
+
+2. download & install: 1. intelliJ
+                       2. Zookeeper + Kafka
+                       3. kafka manager
+                       4. mongoDB (cmd)
+                       5. redis (cmd)
+
+3. edit the config files with the correct IP addresses and ports
+    inside kafka config folder you need to edit: 1. zookeeper.properties
+                                                 2. server.properties
+
+
+4. run the servers:
+   - intelliJ from intelliJ folder (./idea.sh)
+   - zookeeper server from kafka folder (bin/zookeeper-server-start.sh config/zookeeper.properties)
+   - kafka server from kafka folder (JMX_PORT=8004 bin/kafka-server-start.sh config/server.properties)
+   - kafka manager from CMAK folder (bin/cmak -Dconfig.file=conf/application.conf -Dhttp.port=8080)
+
+5.go to localhost:8080 & create a cluster in kafka manager name project
+  with the zookeeper address 192.168.6.128:8080,
+  mark : 1. JMX
+         2. Poll
+  make a Topic name Event-info
+
+6. run mongoDB, if doesn't work try: 1. service mongod stop
+                                     2. systemctl start mongod
+                                     3. mongo
+   create db name EventDB, with two collections: 1. time (need to create first "Time": ISODate())
+                                                 2. events
+
+7. run redis (redis-cli) & ping to see if works.
+
+
+INFO:
+- kafka server (broker) - 192.168.6.128:9091
+- zookeeper server - 192.168.6.128:2181
+- kafka manager - 192.168.6.128:8080
+
+MONGO COMMANDS:
+- mongo
+- show dbs
+- show collections
+- use <DB name> to create and use*
+- db.createCollection("collection name")
+- db.collectionName.drop()
+- db.getCollectionNames()
+- db.collectionName.find({}, {_id:0})
+- db.collectionName.find({age:{$gt:30}})
+- db.collectionName.count()
+- db.collectionName.insert({"name" : "John"})
+
+REDIS COMMANDS:
+- redis-cli
+- systemctl status redis
+- ping
+- keys * (*a*)
+- flushall
+- set [key : value]
+- get [key]
+
+FIX BUGS:
+- need to sort() the given objects from mongo from the biggest to the lowest,
+  needs to be added after projection() in redisStore
+
+
+EXTRA:
+-to see the actual comments we'll use this command
+    ./bin/kafka-console-consumer.sh --bootstrap-server 192.168.6.128:9092 --topic channel --from-beginning
+
+- The code was written in JAVA 11

@@ -1,0 +1,6 @@
+proEndLoopNum: 1001
+proStartLoopNum: 1
+metricValueRanNum: 501
+proSleepTime: 1000
+redisSleepTime: 30000
+
